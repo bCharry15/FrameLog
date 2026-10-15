@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+import { RouterLink } from 'vue-router'
 import type { Movie } from '@/services/movieService'
 
 const props = defineProps<{
@@ -25,33 +26,38 @@ watch(posterUrl, () => {
 
 <template>
   <article class="movie-card">
-    <img
-      v-if="posterUrl && !imageFailed"
-      :src="posterUrl"
-      :alt="`Afiche de ${movie.title}`"
-      class="movie-poster"
-      loading="lazy"
-      width="500"
-      height="750"
-      @error="imageFailed = true"
-    />
+    <RouterLink
+      :to="{ name: 'movie-details', params: { id: movie.id } }"
+      class="movie-link"
+    >
+      <img
+        v-if="posterUrl && !imageFailed"
+        :src="posterUrl"
+        :alt="`Afiche de ${movie.title}`"
+        class="movie-poster"
+        loading="lazy"
+        width="500"
+        height="750"
+        @error="imageFailed = true"
+      />
 
-    <div v-else class="movie-poster poster-placeholder">
-      Sin afiche
-    </div>
+      <div v-else class="movie-poster poster-placeholder">
+        Sin afiche
+      </div>
 
-    <div class="movie-info">
-      <h3>{{ movie.title }}</h3>
-      <p>{{ releaseYear }}</p>
+      <div class="movie-info">
+        <h3>{{ movie.title }}</h3>
+        <p>{{ releaseYear }}</p>
 
-      <p class="movie-rating">
-        {{
-          movie.vote_count > 0
-            ? `TMDB · ${movie.vote_average.toFixed(1)} / 10`
-            : 'TMDB · Sin calificaciones'
-        }}
-      </p>
-    </div>
+        <p class="movie-rating">
+          {{
+            movie.vote_count > 0
+              ? `TMDB · ${movie.vote_average.toFixed(1)} / 10`
+              : 'TMDB · Sin calificaciones'
+          }}
+        </p>
+      </div>
+    </RouterLink>
   </article>
 </template>
 
@@ -60,6 +66,23 @@ watch(posterUrl, () => {
   overflow: hidden;
   background: #191c24;
   border: 1px solid #2a2e3a;
+  border-radius: 14px;
+}
+
+.movie-link {
+  display: block;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.movie-link:hover {
+  background: #202430;
+}
+
+.movie-link:focus-visible {
+  outline: 3px solid #f5b942;
+  outline-offset: -3px;
   border-radius: 14px;
 }
 

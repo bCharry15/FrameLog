@@ -44,6 +44,7 @@ func main() {
 
 	mux.HandleFunc("GET /api/v1/health/live", healthHandler)
 	mux.HandleFunc("GET /api/v1/movies", catalogHandler.ListMovies)
+	mux.HandleFunc("GET /api/v1/movies/{id}", catalogHandler.GetMovie)
 
 	server := &http.Server{
 		Addr:              "127.0.0.1:8080",
